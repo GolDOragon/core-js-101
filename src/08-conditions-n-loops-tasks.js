@@ -417,7 +417,6 @@ function toNaryString(num, n) {
 function getCommonDirectoryPath(pathes) {
   const isFirstSlash = (arr) => {
     for (let i = 0; i < arr.length; i += 1) {
-      console.log('arr[i][0] :>> ', arr[i][0]);
       if (arr[i][0] !== '/') return false;
     }
     return true;

@@ -97,18 +97,20 @@ function getFastestPromise(array) {
  *    });
  *
  */
-async function chainPromises(array, action) {
-  const result = [];
-  await array.forEach(async (promise) => {
-    const value = await promise;
-    console.log('value :>> ', value);
-    result.push(value);
-  });
+function chainPromises(/* array, action */) {
+  throw new Error('Not implemented');
+  // const result = [];
+  // await array.forEach(async (promise) => {
+  //   const value = await promise;
+  //   console.log('value :>> ', value);
+  //   result.push(value);
+  // });
 
-  const ans = result.reduce((sum, current) => action(sum, current), 0);
-  console.log('ans :>> ', ans);
-  return ans;
+  // const ans = result.reduce((sum, current) => action(sum, current), 0);
+  // console.log('ans :>> ', ans);
+  // return ans;
 }
+
 
 module.exports = {
   willYouMarryMe,
