@@ -27,8 +27,11 @@
  *  21 => 'Fizz'
  *
  */
-function getFizzBuzz(/* num */) {
-  throw new Error('Not implemented');
+function getFizzBuzz(num) {
+  if (num % 15 === 0) return 'FizzBuzz';
+  if (num % 5 === 0) return 'Buzz';
+  if (num % 3 === 0) return 'Fizz';
+  return num;
 }
 
 
@@ -43,8 +46,12 @@ function getFizzBuzz(/* num */) {
  *   5  => 120
  *   10 => 3628800
  */
-function getFactorial(/* n */) {
-  throw new Error('Not implemented');
+function getFactorial(n) {
+  let result = 1;
+  for (let i = 1; i < n + 1; i += 1) {
+    result *= i;
+  }
+  return result;
 }
 
 
@@ -60,8 +67,12 @@ function getFactorial(/* n */) {
  *   5,10  =>  45 ( = 5+6+7+8+9+10 )
  *   -1,1  =>  0  ( = -1 + 0 + 1 )
  */
-function getSumBetweenNumbers(/* n1, n2 */) {
-  throw new Error('Not implemented');
+function getSumBetweenNumbers(n1, n2) {
+  let sum = 0;
+  for (let i = n1; i < n2 + 1; i += 1) {
+    sum += i;
+  }
+  return sum;
 }
 
 
@@ -80,8 +91,13 @@ function getSumBetweenNumbers(/* n1, n2 */) {
  *   10,1,1   =>  false
  *   10,10,10 =>  true
  */
-function isTriangle(/* a, b, c */) {
-  throw new Error('Not implemented');
+function isTriangle(a, b, c) {
+  const sum = a + b + c;
+  // eslint-disable-next-line no-restricted-syntax
+  for (const side of [a, b, c]) {
+    if (sum - side <= side) return false;
+  }
+  return true;
 }
 
 
@@ -148,8 +164,10 @@ function doRectanglesOverlap(/* rect1, rect2 */) {
  *   { center: { x:0, y:0 }, radius:10 },  { x:10, y:10 }   => false
  *
  */
-function isInsideCircle(/* circle, point */) {
-  throw new Error('Not implemented');
+function isInsideCircle(circle, point) {
+  const vector = Math.sqrt((point.x - circle.center.x) ** 2 + (point.y - circle.center.y) ** 2);
+  if (vector < circle.radius) return true;
+  return false;
 }
 
 
@@ -164,8 +182,22 @@ function isInsideCircle(/* circle, point */) {
  *   'abracadabra'  => 'c'
  *   'entente' => null
  */
-function findFirstSingleChar(/* str */) {
-  throw new Error('Not implemented');
+function findFirstSingleChar(str) {
+  const repeated = [];
+  const noRepeated = [];
+  // eslint-disable-next-line no-restricted-syntax
+  for (const s of str) {
+    if (!repeated.includes(s)) {
+      const index = noRepeated.indexOf(s);
+      if (index === -1) {
+        noRepeated.push(s);
+      } else {
+        noRepeated.splice(index, 1);
+        repeated.push(s);
+      }
+    }
+  }
+  return noRepeated[0] ? noRepeated[0] : null;
 }
 
 
@@ -191,8 +223,12 @@ function findFirstSingleChar(/* str */) {
  *   5, 3, true, true   => '[3, 5]'
  *
  */
-function getIntervalString(/* a, b, isStartIncluded, isEndIncluded */) {
-  throw new Error('Not implemented');
+function getIntervalString(a, b, isStartIncluded, isEndIncluded) {
+  const startBracket = isStartIncluded ? '[' : '(';
+  const endBracket = isEndIncluded ? ']' : ')';
+  const interval = a > b ? [b, a] : [a, b];
+
+  return startBracket + interval.join(', ') + endBracket;
 }
 
 
@@ -208,8 +244,8 @@ function getIntervalString(/* a, b, isStartIncluded, isEndIncluded */) {
  * 'rotator' => 'rotator'
  * 'noon' => 'noon'
  */
-function reverseString(/* str */) {
-  throw new Error('Not implemented');
+function reverseString(str) {
+  return str.split('').reverse().join('');
 }
 
 
@@ -225,8 +261,8 @@ function reverseString(/* str */) {
  *   87354 => 45378
  *   34143 => 34143
  */
-function reverseInteger(/* num */) {
-  throw new Error('Not implemented');
+function reverseInteger(num) {
+  return `${num}`.split('').reverse().join('');
 }
 
 
@@ -253,6 +289,25 @@ function reverseInteger(/* num */) {
 function isCreditCardNumber(/* ccn */) {
   throw new Error('Not implemented');
 }
+// // let sum = 0;
+
+// // for (let i = 0; i < ccn.length; i += 1) {
+// //   let cardNum = parseInt(ccn[i]);
+
+// //   if ((ccn.length - i) % 2 === 0) {
+// //     cardNum *= 2;
+
+// //     if (cardNum > 9) {
+// //       cardNum -= 9;
+// //     }
+// //   }
+
+// //   sum += cardNum;
+// // }
+
+// // return sum % 10 === 0;
+
+// console.log(isCreditCardNumber('4571234567890111'));
 
 /**
  * Returns the digital root of integer:
@@ -268,8 +323,14 @@ function isCreditCardNumber(/* ccn */) {
  *   10000 ( 1+0+0+0+0 = 1 ) => 1
  *   165536 (1+6+5+5+3+6 = 26,  2+6 = 8) => 8
  */
-function getDigitalRoot(/* num */) {
-  throw new Error('Not implemented');
+function getDigitalRoot(num) {
+  let arr = `${num}`.split('');
+
+  while (arr.length > 1) {
+    const sum = arr.reduce((prev, current) => prev + +current, 0);
+    arr = `${sum}`.split('');
+  }
+  return arr[0];
 }
 
 
@@ -294,10 +355,27 @@ function getDigitalRoot(/* num */) {
  *   '{)' = false
  *   '{[(<{[]}>)]}' = true
  */
-function isBracketsBalanced(/* str */) {
-  throw new Error('Not implemented');
-}
+function isBracketsBalanced(str) {
+  const OPEN_BRACKETS = ['[', '(', '{', '<'];
+  const CLOSE_BRACKETS = [']', ')', '}', '>'];
+  const rightBrackets = [];
 
+  for (let i = 0; i < str.length; i += 1) {
+    const indexForOpen = OPEN_BRACKETS.indexOf(str[i]);
+    const indexForClose = CLOSE_BRACKETS.indexOf(str[i]);
+
+    if (indexForOpen !== -1) {
+      rightBrackets.push(CLOSE_BRACKETS[indexForOpen]);
+    } else
+    if (indexForClose !== -1) {
+      const neededBracket = rightBrackets.pop();
+      if (neededBracket !== str[i]) return false;
+    } else {
+      throw Error('No valid symbol');
+    }
+  }
+  return !rightBrackets.length;
+}
 
 /**
  * Returns the string with n-ary (binary, ternary, etc, where n <= 10)
@@ -319,8 +397,8 @@ function isBracketsBalanced(/* str */) {
  *    365, 4  => '11231'
  *    365, 10 => '365'
  */
-function toNaryString(/* num, n */) {
-  throw new Error('Not implemented');
+function toNaryString(num, n) {
+  return num.toString(n);
 }
 
 
@@ -336,8 +414,34 @@ function toNaryString(/* num, n */) {
  *   ['/web/assets/style.css', '/.bin/mocha',  '/read.me'] => '/'
  *   ['/web/favicon.ico', '/web-scripts/dump', '/webalizer/logs'] => '/'
  */
-function getCommonDirectoryPath(/* pathes */) {
-  throw new Error('Not implemented');
+function getCommonDirectoryPath(pathes) {
+  const isFirstSlash = (arr) => {
+    for (let i = 0; i < arr.length; i += 1) {
+      console.log('arr[i][0] :>> ', arr[i][0]);
+      if (arr[i][0] !== '/') return false;
+    }
+    return true;
+  };
+
+  const getPath = (str) => {
+    const path = str.split('/');
+    const lastElement = path.pop();
+    if (!lastElement.includes('.')) path.push(lastElement);
+    return path;
+  };
+
+
+  const commonPath = getPath(pathes[0]);
+  for (let i = 1; i < pathes.length; i += 1) {
+    const path = getPath(pathes[i]);
+    for (let j = 0; j < commonPath.length; j += 1) {
+      const index = path.indexOf(commonPath[j]);
+      if (index === -1) commonPath.splice(j -= 1, 1);
+    }
+  }
+  if (commonPath.length) return `${commonPath.join('/')}/`;
+
+  return isFirstSlash(pathes) ? '/' : '';
 }
 
 
