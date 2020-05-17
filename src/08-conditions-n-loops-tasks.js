@@ -133,10 +133,32 @@ function isTriangle(a, b, c) {
  *   { top:20, left:20, width: 20, height: 20 }    =>  false
  *
  */
-function doRectanglesOverlap(/* rect1, rect2 */) {
-  throw new Error('Not implemented');
-}
+function doRectanglesOverlap(rect1, rect2) {
+  const isInRectangle = (
+    [dotY, dotX],
+    [
+      lineY1, lineX1, lineY2, lineX2,
+    ],
+  ) => (dotX >= lineX1 && dotX <= lineX2) && (dotY >= lineY1 && dotY <= lineY2);
 
+
+  let upper;
+  let down;
+  if (rect1.top < rect2.top) {
+    upper = rect1;
+    down = rect2;
+  } else {
+    upper = rect2;
+    down = rect1;
+  }
+  const { top } = upper;
+  const { left } = upper;
+  const right = upper.left + upper.width;
+  const bottom = upper.top + upper.height;
+
+  return isInRectangle([down.top, down.left], [top, left, bottom, right])
+    || isInRectangle([down.top, down.left + down.width], [top, left, bottom, right]);
+}
 
 /**
  * Returns true, if point lies inside the circle, otherwise false.
@@ -286,28 +308,25 @@ function reverseInteger(num) {
  *   5436468789016589 => false
  *   4916123456789012 => false
  */
-function isCreditCardNumber(/* ccn */) {
-  throw new Error('Not implemented');
+function isCreditCardNumber(ccn) {
+  const getDigit = (num) => {
+    if (num * 2 > 9) {
+      return num * 2 - 9;
+    }
+    return num * 2;
+  };
+
+  const arr = `${ccn}`.split('').reverse();
+  let isChange = false;
+  const sum = arr.reduce((prev, value) => {
+    let digit = +value;
+    if (isChange) digit = getDigit(value);
+    isChange = !isChange;
+    return prev + digit;
+  }, 0);
+  return sum % 10 === 0;
 }
-// // let sum = 0;
 
-// // for (let i = 0; i < ccn.length; i += 1) {
-// //   let cardNum = parseInt(ccn[i]);
-
-// //   if ((ccn.length - i) % 2 === 0) {
-// //     cardNum *= 2;
-
-// //     if (cardNum > 9) {
-// //       cardNum -= 9;
-// //     }
-// //   }
-
-// //   sum += cardNum;
-// // }
-
-// // return sum % 10 === 0;
-
-// console.log(isCreditCardNumber('4571234567890111'));
 
 /**
  * Returns the digital root of integer:
@@ -462,8 +481,18 @@ function getCommonDirectoryPath(pathes) {
  *                         [ 6 ]]
  *
  */
-function getMatrixProduct(/* m1, m2 */) {
-  throw new Error('Not implemented');
+function getMatrixProduct(m1, m2) {
+  const getColumn = (matrix, number) => matrix.map((row) => row[number]);
+  const arrayMultiply = (arr1, arr2) => arr1.reduce((sum, num, i) => sum + num * arr2[i], 0);
+
+  return m1.map((row) => {
+    const res = [];
+    for (let i = 0; i < row.length; i += 1) {
+      const column = getColumn(m2, i);
+      res.push(arrayMultiply(row, column));
+    }
+    return res.filter((value) => value === +value);
+  });
 }
 
 
@@ -497,8 +526,49 @@ function getMatrixProduct(/* m1, m2 */) {
  *    [    ,   ,    ]]
  *
  */
-function evaluateTicTacToePosition(/* position */) {
-  throw new Error('Not implemented');
+function evaluateTicTacToePosition(position) {
+  const isEqual = (arr) => {
+    if (arr.length !== 3) return false;
+    if (arr[0] === undefined) return false;
+    if (arr[0] === arr[1] && arr[0] === arr[2]) return true;
+
+    return false;
+  };
+  const checkRows = (matrix) => {
+    for (let i = 0; i < matrix.length; i += 1) {
+      const row = matrix[i];
+      if (isEqual(row)) return row[0];
+    }
+    return false;
+  };
+
+  const getColumn = (matrix, number) => matrix.map((row) => row[number]);
+
+  const checkColumns = (matrix) => {
+    for (let i = 0; i < matrix.length; i += 1) {
+      const column = getColumn(matrix, i);
+      if (isEqual(column)) return column[0];
+    }
+    return false;
+  };
+
+  const checkDiagonals = (matrix) => {
+    const diag1 = [];
+    const diag2 = [];
+    for (let i = 0; i < matrix.length; i += 1) {
+      const row = matrix[i];
+      diag1.push(row[i]);
+      diag2.push(row[row.length - (i + 1)]);
+    }
+    if (isEqual(diag1)) return diag1[0];
+    if (isEqual(diag2)) return diag2[0];
+    return false;
+  };
+
+  if (checkRows(position)) return checkRows(position);
+  if (checkColumns(position)) return checkColumns(position);
+  if (checkDiagonals(position)) return checkDiagonals(position);
+  return undefined;
 }
 
 
